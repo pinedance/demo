@@ -26,17 +26,19 @@
 (function(){
     var app = angular.module('myDemo', ['ngRoute', 'ngSanitize']);
 
-    app.controller('demoCtrl', ['$scope', '$route', '$routeParams', '$window', 'address', function($scope, $route, $routeParams, $window, address) {
+    app.controller('demoCtrl', ['$scope', '$route', '$routeParams', '$window', '$filter', 'address', function($scope, $route, $routeParams, $window, $filter, address) {
 
         $scope.$on('$routeChangeSuccess', function () {
-             $window.location.href = address.get()[$routeParams.title];
+            var trgElems = $filter("filter")( address.get(), {id: $routeParams.title} );
+            $window.location.href = trgElems[0]["url"];
         });
     }])
 
     app.controller('demoListCtrl', ['$scope', '$location', 'address', function($scope, $location, address){
         
         $scope.address = address.get();
-        $scope.here = $location.absUrl();
+        var absurl = $location.absUrl();
+        $scope.here = absurl.replace("/index.html", "") 
     }]);
     
     app.config(['$routeProvider', function($routeProvider) { $routeProvider
@@ -53,14 +55,39 @@
 
     app.service('address', function(){
         this.get = function(){
-        return {
+        return [
             // list of demo
-            'HF-IFF' : 'https://sandbox.mediclassics.kr:3838/2015CGAnalysis/HF-IFF-demo/',
-            'accupoints-pathologies' : 'https://sandbox.mediclassics.kr:3838/2014SymAcuIndependence/',
-            'accupoints-pathologies2' : 'https://sandbox.mediclassics.kr:3838/2015SymAcuIndependence/',
-            'accupoints-pathologies3' : 'https://sandbox.mediclassics.kr:3838/2016SymAcuIndependence/',
-			'Detecting-Local-Text-Reuse' : 'https://pinedance.github.io/demo/detecting-local-text-reuse/동의보감-황제내경소문-텍스트-인용.html',
-        }}
+            {
+                title: 'HF-IFF', 
+                id: 'HF-IFF',
+                year: "2015",
+                url: 'https://sandbox.mediclassics.kr:3838/2015CGAnalysis/HF-IFF-demo/'
+            },
+            {
+                title: 'Accupoints Pathologies Ver1',
+                id: 'accupoints-pathologies',
+                year: "2014",
+                url: 'https://sandbox.mediclassics.kr:3838/2014SymAcuIndependence/'
+            },
+            {
+                title: 'Accupoints Pathologies Ver2',
+                id: 'accupoints-pathologies2',
+                year: "2015",
+                url: 'https://sandbox.mediclassics.kr:3838/2015SymAcuIndependence/'
+            },
+            {
+                title: 'Accupoints Pathologies Ver3',
+                id: 'accupoints-pathologies3',
+                year: "2016",
+                url: 'https://sandbox.mediclassics.kr:3838/2016SymAcuIndependence/'
+            },
+			{
+                title: 'Detecting Local Text Reuse',
+                id: "detecting-local-text-reuse",
+                year: "2020",
+                url: 'https://pinedance.github.io/demo/detecting-local-text-reuse/동의보감-황제내경소문-텍스트-인용.html'
+            },
+        ]}
 
     })
 

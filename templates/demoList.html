@@ -7,9 +7,9 @@
             </div>
             
                 <ul class="list-group">
-                      <li class="list-group-item" ng-repeat='(title, link) in address'>
-                          Junho Oh. {{title}} Demo App [Internet]. Available from: <a ng-href="{{'#/' + title}}" target='_blank' >{{ here + '#/' + title}}</a>
-
+                      <li class="list-group-item" ng-repeat="elem in address | orderBy: 'year'" >
+                          Junho Oh. {{ elem.title }} Demo App {{ elem.year }} [Internet]. Available from: 
+                          <a ng-href="{{'#/' + elem.id}}" target='_blank' >{{ here + '#/' + elem.id }}</a>
                       </li>
 
                 </ul>
